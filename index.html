@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Debounce & Throttle</title>
+</head>
+<body>
+	<input type="text"><br>
+	Default: <span data-default></span> (<span data-default-count></span>)<br>
+	Debounce: <span data-debounce></span> (<span data-debounce-count></span>)<br>
+	Throttle: <span data-throttle></span> (<span data-throttle-count></span>)<br>
+</body>
+<script src="debounce.js"></script>
+<script src="throttle.js"></script>
+<script>
+	var input = document.querySelector('input');
+	var _default = document.querySelector('[data-default]');
+	var _debounce = document.querySelector('[data-debounce]');
+	var _throttle = document.querySelector('[data-throttle]');
+	var _default_count = document.querySelector('[data-default-count]');
+	var _debounce_count = document.querySelector('[data-debounce-count]');
+	var _throttle_count = document.querySelector('[data-throttle-count]');
+
+	function incrementCount(element) {
+		element.textContent = (parseInt(element.textContent) || 0) + 1;
+	}
+
+	var updateDebounceText = debounce(function(text) {
+		_debounce.innerHTML = text;
+		incrementCount(_debounce_count);
+	});
+
+	var updateThrottleText = throttle(function(text) {
+		_throttle.innerHTML = text;
+		incrementCount(_throttle_count);
+	});
+
+	input.addEventListener('input', function(e) {
+		_default.innerHTML = e.target.value;
+		incrementCount(_default_count);
+		updateDebounceText(e.target.value);
+		updateThrottleText(e.target.value);
+	});
+
+	document.addEventListener('mousemove', function(e) {
+		incrementCount(_default_count);
+		updateDebounceText(_default.textContent);
+		updateThrottleText(_default.textContent);
+	});
+</script>
+</html>
